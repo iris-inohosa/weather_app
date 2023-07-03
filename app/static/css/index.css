@@ -1,0 +1,19 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #272d39;
+    color: white;
+}
+
+#app {
+    background-color: #354359;
+    margin-top: 50px;
+    border-radius: 25px;
+}
+
+.extras {
+    text-decoration: none;
+}
+
+.forecast-days {
+    overflow-x: scroll;
+}
