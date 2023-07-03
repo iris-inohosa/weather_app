@@ -1,4 +1,3 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -17,13 +16,15 @@
         integrity="sha512-8Z5++K1rB3U+USaLKG6oO8uWWBhdYsM3hmdirnOEWp8h2B1aOikj5zBzlXs8QOrvY9OxEnD2QDkbSKKpfqcIWw=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     <!-- Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'weather_checker/css/index.css' %}">
+    <!-- Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
     <!-- Custom js -->
-    <script src="{% static 'weather_checker/js/index.js' %}"></script>
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
 </head>
 
 <body>
@@ -36,19 +37,27 @@
                     </h2>
                     <div class="input-group mb-3">
                         <input id="city-search" type="text" class="form-control" placeholder="Type location"
-                            aria-label="location" aria-describedby="search-btn">
-                        <button class="btn btn-outline-secondary" type="button" id="button-addon2">Search</button>
+                            aria-label="location" aria-describedby="search-btn" city-id="">
                     </div>
                 </div>
                 <div class="row p-3 weather-current">
                     <div class="col">
-                        <h5 class="block-title">
+                        <h5 class="block-title" id="today-title">
                             Today
                         </h5>
-                        <div class="row">
+                        <div class="row py-4">
                             <div class="col-6">
-                                <img src="" alt="">
-                                <div>30°</div>
+                                <div class="row">
+                                    <div class="col-3">
+                                        <img src="https://developer.foreca.com/static/images/symbols/d000.png" alt=""
+                                            id="weather-symbol" width="100">
+                                    </div>
+                                    <div class="col-6">
+                                        <h1 class="align-middle py-3" id="temperature">30°C</h1>
+                                    </div>
+                                </div>
+
+
                             </div>
                             <div class="col-6">
                                 <ul class="extras">
@@ -67,8 +76,8 @@
                             Forecast
                         </h5>
                         <div class="row py-3 d-flex flex-row flex-nowrap forecast-days">
-                            {% for item in context %}
-                            {% include 'weather_checker/include/single_day.html' %}
+                            {% for i in range(13) %}
+                            {% include 'include/single_day.html' %}
                             {% endfor %}
                         </div>
                     </div>

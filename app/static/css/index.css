@@ -17,3 +17,7 @@ body {
 .forecast-days {
     overflow-x: scroll;
 }
+
+#temperature {
+    font-size: 40pt;
+}
