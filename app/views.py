@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, jsonify
 import requests
 import json
 from datetime import datetime
-
+import foreca_api
 # Blueprints
 # -------------------------------------------------------------------------
 views = Blueprint('views', __name__, url_prefix='',
@@ -10,9 +10,12 @@ views = Blueprint('views', __name__, url_prefix='',
 
 # -------------------------------------------------------------------------
 
+foreca_api_connector = foreca_api.ForecaAPIConnector()
 
 # Views
 # -------------------------------------------------------------------------
+
+
 @views.route('/')
 def index():
     return render_template('index.html')
@@ -21,13 +24,7 @@ def index():
 @views.route('api/get-current-weather/<city_id>')
 def get_current_weather(city_id):
     # foreca api
-    url = f"https://foreca-weather.p.rapidapi.com/current/{city_id}"
-    querystring = {"tempunit": "C", "windunit": "KMH"}
-    headers = {
-        "X-RapidAPI-Key": "fea3ded0c9msh3e73fe94cc634c7p164599jsn4956791f6a6a",
-        "X-RapidAPI-Host": "foreca-weather.p.rapidapi.com"
-    }
-    response = requests.get(url, headers=headers, params=querystring)
+    response = foreca_api_connector.get_current_weather(city_id=city_id)
     if response.status_code == 200:
         data = response.json()['current']
         return data
@@ -39,13 +36,8 @@ def get_current_weather(city_id):
 def get_cities():
     # foreca weather api
     querystring = request.args.get('term')
-    url = f"https://foreca-weather.p.rapidapi.com/location/search/{querystring}"
-    # querystring = {"lang": "en", "country": "in"} # oprtional
-    headers = {
-        "X-RapidAPI-Key": "fea3ded0c9msh3e73fe94cc634c7p164599jsn4956791f6a6a",
-        "X-RapidAPI-Host": "foreca-weather.p.rapidapi.com"
-    }
-    response = requests.get(url, headers=headers)
+    response = foreca_api_connector.get_cities_autocomplete(
+        searchstring=querystring)
     if response.status_code == 200:
         locations = response.json()['locations'][:15]
         result = []
@@ -64,15 +56,7 @@ def get_cities():
 
 @views.route('api/get-next-days-forecast/<city_id>')
 def get_forecast(city_id):
-    url = f"https://foreca-weather.p.rapidapi.com/forecast/daily/{city_id}"
-    querystring = {"tempunit": "C", "windunit": "KMH",
-                   "periods": "12", "dataset": "full"}
-    headers = {
-        "X-RapidAPI-Key": "fea3ded0c9msh3e73fe94cc634c7p164599jsn4956791f6a6a",
-        "X-RapidAPI-Host": "foreca-weather.p.rapidapi.com"
-    }
-
-    response = requests.get(url, headers=headers, params=querystring)
+    response = foreca_api_connector.get_next_days_forecast(city_id=city_id)
     if response.status_code == 200:
         week_days = ['Mond', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
         data = response.json()['forecast']
