@@ -21,6 +21,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- Styles -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
     <!-- Custom js -->
@@ -40,7 +44,7 @@
                             aria-label="location" aria-describedby="search-btn" city-id="">
                     </div>
                 </div>
-                <div class="row p-3 weather-current">
+                <div class="row p-3 weather-current hide-block">
                     <div class="col">
                         <h5 class="block-title" id="today-title">
                             Today
@@ -49,28 +53,26 @@
                             <div class="col-6">
                                 <div class="row">
                                     <div class="col-3">
-                                        <img src="https://developer.foreca.com/static/images/symbols/d000.png" alt=""
-                                            id="weather-symbol" width="100">
+                                        <img src="" alt="" id="weather-symbol" width="100">
                                     </div>
                                     <div class="col-6">
-                                        <h1 class="align-middle py-3" id="temperature">30°C</h1>
+                                        <h1 class="align-middle py-3" id="temperature"></h1>
                                     </div>
+                                </div>
+                                <div class="row p-3">
+                                    <h6 class="symbol-phrase"></h6>
                                 </div>
 
 
                             </div>
                             <div class="col-6">
                                 <ul class="extras">
-                                    <li>Feels like 24°</li>
-                                    <li>Humidity: </li>
-                                    <li>Wind: </li>
-                                    <li>Pressure: </li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="row container-fluid p-3 weather-forecast">
+                <div class="row container-fluid p-3 weather-forecast hide-block">
                     <div class="col">
                         <h5 class="py-2 block-title">
                             Forecast
