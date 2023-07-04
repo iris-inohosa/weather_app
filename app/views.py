@@ -1,27 +1,35 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, jsonify
 import requests
+import json
+from datetime import datetime
 
+# Blueprints
+# -------------------------------------------------------------------------
 views = Blueprint('views', __name__, url_prefix='',
                   template_folder='templates', static_folder='static')
 
+# -------------------------------------------------------------------------
 
+
+# Views
+# -------------------------------------------------------------------------
 @views.route('/')
 def index():
     return render_template('index.html')
 
 
-@views.route('get-current-weather/<city_id>')
+@views.route('api/get-current-weather/<city_id>')
 def get_current_weather(city_id):
     # foreca api
     url = f"https://foreca-weather.p.rapidapi.com/current/{city_id}"
+    querystring = {"tempunit": "C", "windunit": "KMH"}
     headers = {
         "X-RapidAPI-Key": "fea3ded0c9msh3e73fe94cc634c7p164599jsn4956791f6a6a",
         "X-RapidAPI-Host": "foreca-weather.p.rapidapi.com"
     }
-    response = requests.get(url, headers=headers)
+    response = requests.get(url, headers=headers, params=querystring)
     if response.status_code == 200:
         data = response.json()['current']
-        print(data)
         return data
     else:
         return {'Failed': response.status_code}
@@ -57,7 +65,8 @@ def get_cities():
 @views.route('api/get-next-days-forecast/<city_id>')
 def get_forecast(city_id):
     url = f"https://foreca-weather.p.rapidapi.com/forecast/daily/{city_id}"
-    querystring = {"periods": "12"}
+    querystring = {"tempunit": "C", "windunit": "KMH",
+                   "periods": "12", "dataset": "full"}
     headers = {
         "X-RapidAPI-Key": "fea3ded0c9msh3e73fe94cc634c7p164599jsn4956791f6a6a",
         "X-RapidAPI-Host": "foreca-weather.p.rapidapi.com"
@@ -65,8 +74,24 @@ def get_forecast(city_id):
 
     response = requests.get(url, headers=headers, params=querystring)
     if response.status_code == 200:
-        data = response.json()
-        print(data)
-        return data
+        week_days = ['Mond', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        data = response.json()['forecast']
+        for day in data:
+            datetime_object = datetime.strptime(
+                day['date'], '%Y-%m-%d')
+
+            week_day = week_days[datetime_object.weekday()]
+            day['weekday'] = week_day
+            day['short_date'] = f'{datetime_object.day}.{datetime_object.month}'
+        return {'forecast_data': data}
     else:
         return {'Failed': response.status_code}
+
+
+@views.route('api/weather-forecast', methods=['GET', 'POST'])
+def single_day_forecast():
+    if request.method == 'POST':
+        forecast_data = request.get_json()['forecast_data']
+        forecast_data.pop(0)
+    return jsonify({'htmlresponse': render_template('include/single_day.html', data=forecast_data)})
+# -------------------------------------------------------------------------

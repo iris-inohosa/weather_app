@@ -32,7 +32,7 @@
 </head>
 
 <body>
-    <div class="container p-5" id="app">
+    <div class="container px-5 py-3" id="app">
         <div class="row">
             <div class="col-12">
                 <div class="row header gy-2 p-3">
@@ -44,7 +44,7 @@
                             aria-label="location" aria-describedby="search-btn" city-id="">
                     </div>
                 </div>
-                <div class="row p-3 weather-current hide-block">
+                <div class="row px-3 weather-current hide-block">
                     <div class="col">
                         <h5 class="block-title" id="today-title">
                             Today
@@ -72,15 +72,12 @@
                         </div>
                     </div>
                 </div>
-                <div class="row container-fluid p-3 weather-forecast hide-block">
+                <div class="row container-fluid px-3 weather-forecast hide-block">
                     <div class="col">
-                        <h5 class="py-2 block-title">
-                            Forecast
+                        <h5 class="block-title">
+                            Next days
                         </h5>
-                        <div class="row py-3 d-flex flex-row flex-nowrap forecast-days">
-                            {% for i in range(13) %}
-                            {% include 'include/single_day.html' %}
-                            {% endfor %}
+                        <div class="row d-flex flex-row flex-nowrap forecast-days">
                         </div>
                     </div>
                 </div>

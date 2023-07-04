@@ -20,13 +20,31 @@
         $('#city-search').on('autocompletechange', function () {
             let city = this.value;
             let cityId = $(this).attr('city-id')
-            fetch(`/get-current-weather/${cityId}`).then(resp => {
+            fetch(`api/get-current-weather/${cityId}`).then(resp => {
                 resp.json().then(data => {
                     $(this).val('');
                     // get weather data and update html values
                     updateUI(data, city);
                     // reset autocompletet term value
                     $('#city-search').data().uiAutocomplete.term = null;
+                })
+            });
+            fetch(`api/get-next-days-forecast/${cityId}`).then(resp => {
+                resp.json().then(data => {
+                    $.ajax({
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(data),
+                        dataType: 'json',
+                        url: 'api/weather-forecast',
+                        success: function (responce) {
+                            $('.forecast-days').html(responce.htmlresponse)
+
+                        },
+                        error: function (error) {
+                            console.log(error);
+                        }
+                    });
                 })
             })
         });

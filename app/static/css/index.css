@@ -36,3 +36,7 @@ body {
     background-repeat: no-repeat;
     padding-left: 35px;
 }
+
+#today-title {
+    color: #00dd93;
+}
